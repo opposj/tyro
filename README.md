@@ -1,6 +1,7 @@
 ### Difference with the original `tyro` 
 This repo builds a hierarchical fully-dispatchable CLI based on the original `tyro`. 
-For quick uses, see the [Examples](tests/test_dispatch) folder.
+For quick uses, see the [Examples](tests/test_dispatch) folder. 
+To install, use `pip install git+https://github.com/opposj/tyro.git`.
 
 <br />
 <p align="center">
