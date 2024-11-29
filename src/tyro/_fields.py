@@ -813,6 +813,11 @@ def _field_list_from_tuple(
     ):
         default_instance = (default_instance,) * len(children)
 
+    if len(children) != len(default_instance):
+        raise ValueError(
+            f"The default tuple {default_instance} is incompatible with {f}."
+        )
+
     for i, child in enumerate(children):
         default_i = default_instance[i]  # type: ignore
         field_list.append(

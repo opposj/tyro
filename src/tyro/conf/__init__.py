@@ -23,4 +23,5 @@ from ._markers import Suppress as Suppress
 from ._markers import SuppressFixed as SuppressFixed
 from ._markers import UseAppendAction as UseAppendAction
 from ._markers import UseCounterAction as UseCounterAction
+from ._markers import StringToType as StringToType
 from ._markers import configure as configure

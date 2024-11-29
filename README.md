@@ -1,3 +1,7 @@
+### Difference with the original `tyro` 
+This repo builds a hierarchical fully-dispatchable CLI based on the original `tyro`. 
+For quick uses, see the [Examples](tests/test_dispatch) folder.
+
 <br />
 <p align="center">
     <!--

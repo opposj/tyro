@@ -15,6 +15,9 @@ from .. import _singleton
 
 T = TypeVar("T")
 
+StringToType = Annotated[T, None]
+"""The annotated argument should be parsed as a string and converted to the specified via YAML safe loading."""
+
 Positional = Annotated[T, None]
 """A type `T` can be annotated as `Positional[T]` if we want to parse it as a positional
 argument."""

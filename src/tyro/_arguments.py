@@ -454,14 +454,22 @@ def _rule_generate_helptext(
                 else json.dumps(arg.field.default)
             )
         elif type(default) in (tuple, list, set):
-            # For tuple types, we might have default as (0, 1, 2, 3).
-            # For list types, we might have default as [0, 1, 2, 3].
-            # For set types, we might have default as {0, 1, 2, 3}.
-            #
-            # In all cases, we want to display (default: 0 1 2 3), for consistency with
-            # the format that argparse expects when we set nargs.
-            assert default is not None
-            default_label = " ".join(map(shlex.quote, map(str, default)))
+            if _markers.StringToType in arg.field.markers:
+                assert default is not None
+
+                def tr(x):
+                    return list(tr(x1) for x1 in x) if isinstance(x, tuple | set) else x
+
+                default_label = str(tr(arg.field.default)).replace(" ", "")
+            else:
+                # For tuple types, we might have default as (0, 1, 2, 3).
+                # For list types, we might have default as [0, 1, 2, 3].
+                # For set types, we might have default as {0, 1, 2, 3}.
+                #
+                # In all cases, we want to display (default: 0 1 2 3), for consistency with
+                # the format that argparse expects when we set nargs.
+                assert default is not None
+                default_label = " ".join(map(shlex.quote, map(str, default)))
         else:
             default_label = str(default)
 

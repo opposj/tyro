@@ -58,6 +58,7 @@ from typing import (
     overload,
 )
 
+import yaml
 from typing_extensions import Annotated, Literal, get_args, get_origin
 
 from . import _resolver
@@ -438,6 +439,33 @@ def _instantiator_from_tuple(
             assert isinstance(b.nargs, int)
             nargs += b.nargs
 
+        if _markers.StringToType in markers:
+
+            def fixed_length_tuple_instantiator(strings: List[str]) -> Any:
+                try:
+                    assert len(strings) == 1
+                    loaded: list[Any] = yaml.safe_load(strings[0])
+                    assert len(loaded) == len(metas)
+                except (yaml.YAMLError, AssertionError):
+                    raise ValueError(
+                        f"Failed to parse {strings[0]} as a tuple of {len(metas)} elements."
+                    )
+
+                # Make tuple.
+                outs = []
+                for i, meta in enumerate(metas):
+                    assert isinstance(meta.nargs, int) and meta.nargs == 1
+                    meta.check_choices([str(loaded[i])])
+                    outs.append(instantiators[i]([str(loaded[i])]))
+                return tuple(outs)
+
+            return fixed_length_tuple_instantiator, InstantiatorMetadata(
+                nargs=1,
+                metavar="[" + ",".join(m.metavar for m in metas) + "]",
+                choices=None,
+                action=None,
+            )
+
         def fixed_length_tuple_instantiator(strings: List[str]) -> Any:
             assert len(strings) == nargs
 
@@ -693,6 +721,51 @@ def _instantiator_from_sequence(
             allow_sequences="fixed_length",
             markers=markers,
         )
+
+        if _markers.StringToType in markers:
+
+            def multi_metavar_from_single(single: str) -> str:
+                if len(_strings.strip_ansi_sequences(single)) >= 32:
+                    # Shorten long metavars
+                    return f"[{single},...]"
+                else:
+                    return f"[{single},{single},...]"
+
+            def sequence_instantiator(strings: List[str]) -> Any:
+                try:
+                    assert len(strings) == 1
+                    loaded: list[Any] = yaml.safe_load(strings[0])
+                    # Validate nargs.
+                    if (
+                        isinstance(inner_meta.nargs, int)
+                        and len(loaded) % inner_meta.nargs != 0
+                    ):
+                        raise ValueError(
+                            f"input {loaded} is of length {len(loaded)}, which is not"
+                            f" divisible by {inner_meta.nargs}."
+                        )
+                except yaml.YAMLError:
+                    raise ValueError(
+                        f"Failed to parse {strings[0]} as a container for {inner_meta.metavar}."
+                    )
+
+                # Make tuple.
+                out = []
+                step = inner_meta.nargs if isinstance(inner_meta.nargs, int) else 1
+                assert step == 1
+                for i in range(0, len(loaded), step):
+                    sub_str = [str(loaded[i])]
+                    inner_meta.check_choices(sub_str)
+                    out.append(make(sub_str)) # type: ignore
+                assert container_type is not None
+                return container_type(out)
+
+            return sequence_instantiator, InstantiatorMetadata(
+                nargs=1,
+                metavar=multi_metavar_from_single(inner_meta.metavar),
+                choices=None,
+                action=None,
+            )
 
         def sequence_instantiator(strings: List[str]) -> Any:
             # Validate nargs.
