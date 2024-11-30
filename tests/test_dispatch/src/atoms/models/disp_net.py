@@ -1,6 +1,10 @@
+import os
 from dataclasses import dataclass, field
 
 from tyro.extras import AtomConfig
+
+
+TEST_HIER = bool(os.environ.get("TEST_HIER", False))
 
 
 @dataclass(frozen=True)
@@ -142,3 +146,209 @@ class StepSchedulerConfig2(AtomConfig, scheduler2="step"):
     step_size: int = 30
     # The gamma for the scheduler.
     gamma: float = 0.1
+
+
+if TEST_HIER:
+    @dataclass(frozen=True)
+    class TestHierConfig[sub1, sub2](AtomConfig, model="test_hier"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub1_cfg: sub1 = None
+        # The sub-configuration 2 for the specified scheduler.
+        sub2_cfg: sub2 = None
+
+        # An inner arg of the config.
+        test_inner: str = "test_hier"
+
+
+    @dataclass(frozen=True)
+    class Sub1Config1[sub1_sub1,sub1_sub2](AtomConfig, sub1="sub1_1"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub1_cfg: sub1_sub1 = None
+        # The sub-configuration 2 for the specified scheduler.
+        sub_sub2_cfg: sub1_sub2 = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_1"
+
+
+    @dataclass(frozen=True)
+    class Sub1Config2[sub1_sub1,sub1_sub2](AtomConfig, sub1="sub1_2"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub1_cfg: sub1_sub1 = None
+        # The sub-configuration 2 for the specified scheduler.
+        sub_sub2_cfg: sub1_sub2 = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_2"
+
+
+    @dataclass(frozen=True)
+    class Sub2Config1[sub2_sub1,sub2_sub2](AtomConfig, sub2="sub2_1"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub1_cfg: sub2_sub1 = None
+        # The sub-configuration 2 for the specified scheduler.
+        sub_sub2_cfg: sub2_sub2 = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_1"
+
+
+    @dataclass(frozen=True)
+    class Sub2Config2[sub2_sub1,sub2_sub2](AtomConfig, sub2="sub2_2"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub1_cfg: sub2_sub1 = None
+        # The sub-configuration 2 for the specified scheduler.
+        sub_sub2_cfg: sub2_sub2 = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_2"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub1Config1[sub1_sub1_sub](AtomConfig, sub1_sub1="sub1_sub1_1"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub1_sub_cfg: sub1_sub1_sub = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub1_1"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub1Config2(AtomConfig, sub1_sub1="sub1_sub1_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub1_2"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub2Config1[sub1_sub2_sub](AtomConfig, sub1_sub2="sub1_sub2_1"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub2_sub_cfg: sub1_sub2_sub = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub2_1"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub2Config2(AtomConfig, sub1_sub2="sub1_sub2_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub2_2"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub1Config1[sub2_sub1_sub](AtomConfig, sub2_sub1="sub2_sub1_1"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub1_sub_cfg: sub2_sub1_sub = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub1_1"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub1Config2(AtomConfig, sub2_sub1="sub2_sub1_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub1_2"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub2Config1[sub2_sub2_sub](AtomConfig, sub2_sub2="sub2_sub2_1"):
+        """Settings for the DispNet model."""
+
+        # The sub-configuration 1 for the specified optimizer.
+        sub_sub2_sub_cfg: sub2_sub2_sub = None
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub2_1"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub2Config2(AtomConfig, sub2_sub2="sub2_sub2_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub2_2"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub1SubConfig1(AtomConfig, sub1_sub1_sub="sub1_sub1_sub_1"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub1_sub_1"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub1SubConfig2(AtomConfig, sub1_sub1_sub="sub1_sub1_sub_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub1_sub_2"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub2SubConfig1(AtomConfig, sub1_sub2_sub="sub1_sub2_sub_1"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub2_sub_1"
+
+
+    @dataclass(frozen=True)
+    class Sub1Sub2SubConfig2(AtomConfig, sub1_sub2_sub="sub1_sub2_sub_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub1_sub2_sub_2"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub1SubConfig1(AtomConfig, sub2_sub1_sub="sub2_sub1_sub_1"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub1_sub_1"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub1SubConfig2(AtomConfig, sub2_sub1_sub="sub2_sub1_sub_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub1_sub_2"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub2SubConfig1(AtomConfig, sub2_sub2_sub="sub2_sub2_sub_1"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub2_sub_1"
+
+
+    @dataclass(frozen=True)
+    class Sub2Sub2SubConfig2(AtomConfig, sub2_sub2_sub="sub2_sub2_sub_2"):
+        """Settings for the DispNet model."""
+
+        # An inner arg of the config.
+        test_inner: str = "sub2_sub2_sub_2"
